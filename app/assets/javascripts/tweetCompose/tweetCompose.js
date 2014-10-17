@@ -48,9 +48,8 @@ $.TweetCompose.prototype.submit = function () {
 $.TweetCompose.prototype.handleSuccess = function (result) {
   this.clearInput();
   this.$el.find(':input').prop('disabled', false);
-  var tweet = JSON.stringify(result);
-  var $li = $('<li>').html(tweet);
-  this.$feedUl.prepend($li);
+
+  this.$feedUl.trigger('insert-tweet', result);
 };
 
 $.TweetCompose.prototype.clearInput = function () {

@@ -11,6 +11,10 @@ $.InfiniteTweets.prototype.bindListeners = function () {
     event.preventDefault();
     self.fetchTweets();
   })
+
+  this.$el.find("ul#feed").on('insert-tweet', function (event, tweet) {
+    self.insertTweet([tweet]);
+  });
 };
 
 $.InfiniteTweets.prototype.fetchTweets = function () {
@@ -30,7 +34,6 @@ $.InfiniteTweets.prototype.fetchTweets = function () {
 
 $.InfiniteTweets.prototype.insertTweets = function (result) {
   var self = this;
-
   var tweets = _.template(self.insertTemplate)({ tweets: result });
 
   this.$el.find('ul#feed').append(tweets)
@@ -41,6 +44,16 @@ $.InfiniteTweets.prototype.insertTweets = function (result) {
   if (result.length < 20) {
     this.$el.find('a.fetch-more').remove();
     this.$el.append('<strong>No More Tweets, Get A Life</strong>')
+  }
+};
+
+$.InfiniteTweets.prototype.insertTweet = function (tweet) {
+  var self = this;
+  var tweets = _.template(self.insertTemplate)({ tweets: tweet });
+
+  this.$el.find('ul#feed').prepend(tweets)
+  if (this.maxCreatedAt === null ) {
+   this.maxCreatedAt = tweet[0].created_at;
   }
 };
 
